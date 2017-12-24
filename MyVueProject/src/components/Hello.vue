@@ -1,12 +1,16 @@
 <template>
 <div class="hello">
 	<div>
-		<label for="UserName">账号</label>
-		<input type='text' v-model.trim="UserName" id="UserName" placeholder="账号" >
+		<label for="MyUserName">账号</label>
+		<input type='text' v-model.trim="MyUserName" id="MyUserName"
+     placeholder="账号" @blur="onUsernameBlur">
+     <span class="error">{{ UserNameError }}</span>
 	</div>
 	<div>
-	<label for="Password">密码</label>
-		<input type='password' v-model.trim="Password" id="Password" placeholder="密码">
+	<label for="MyPassword">密码</label>
+		<input type='password' v-model.trim="MyPassword" id="MyPassword"
+    placeholder="密码"  @blur="onPasswordBlur">
+     <span class="error">{{ PasswordError }}</span>
 	</div>
 	<div>
 		<label for="Sex">性别</label>
@@ -20,26 +24,46 @@
 		<label for="RememberMe">记住我</label>
 		<input type="checkbox" id="RememberMe" v-model="RememberMe">
 	</div>
-	<div>
-	{{ 
-		if(UserName.length===0){
-			"账号不能为空"
-		}
-		if(UserName.length===0){
-			"密码不能为空"
-		}	
-	}}
-	</div>
+	<button v-on:click="subMit">提交</button>
 </div>
 </template>
 <script>
 export default {
-  data	() {
+  data () {
     return {
-      UserName: '',
-      Password: '',
-      RememberMe:	false,
-      Sex:	''
+      MyUserName: '',
+      MyPassword: '',
+      RememberMe: false,
+      Sex: '',
+      UserNameError: '',
+      PasswordError: ''
+    }
+  },
+  methods: {
+    onUsernameBlur: function () {
+      if (this.MyUserName.length === 0) {
+        this.UserNameError = '账号不能为空'
+      } else {
+        this.UserNameError = ''
+      }
+    },
+    onPasswordBlur: function () {
+      if (this.MyPassword.length === 0) {
+        this.PasswordError = '密码不能为空'
+      } else {
+        this.PasswordError = ''
+      }
+    },
+    subMit: function () {
+      this.onUsernameBlur()
+      this.onPasswordBlur()
+      return this.isValid()
+    },
+    isValid: function () {
+      if (this.UserNameError.length === 0 && this.PasswordError.length === 0) {
+        return true
+      }
+      return false
     }
   }
 }
@@ -49,7 +73,10 @@ export default {
 .hello {
   color: #42b983;
 }
-.hello div{
-  margin-left:0px;
+.hello div {
+  margin-left: 0px;
+}
+.error{
+  color: #ca3131;
 }
 </style>
